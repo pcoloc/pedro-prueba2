@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pedro</title>
+    <style>
+        /* Style for centering and sizing */
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #000; /* Optional: set background color */
+        }
+        video {
+            max-height: 100%;
+            max-width: 100%;
+            display: block;
+        }
+        #playButton {
+            cursor: pointer;
+            position: absolute;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+    <!-- Video element -->
+    <video id="video" loop style="display: none;">
+        <source src="pedro.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <!-- Image button -->
+    <img src="button.gif" id="playButton" alt="Click Me">
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
+    <script>
+        // Get the video and image elements
+        var video = document.getElementById('video');
+        var playButton = document.getElementById('playButton');
+
+        // Add click event listener to the image
+        playButton.addEventListener('click', function() {
+            video.play();
+            playButton.style.display = 'none'; // Hide the image button
+            video.style.display = 'block'; // Show the video
+            startConfetti(); // Start confetti when the video plays
+        });
+
+        function startConfetti() {
+            var duration = 15 * 1000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+            function randomInRange(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            var interval = setInterval(function() {
+                var timeLeft = animationEnd - Date.now();
+
+                if (timeLeft <= 0) {
+                    return clearInterval(interval);
+                }
+
+                var particleCount = 50 * (timeLeft / duration);
+                // since particles fall down, start a bit higher than random
+                confetti(Object.assign({}, defaults, {
+                    particleCount,
+                    origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }
+                }));
+                confetti(Object.assign({}, defaults, {
+                    particleCount,
+                    origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }
+                }));
+            }, 250);
+        }
+    </script>
+</body>
+</html>
